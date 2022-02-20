@@ -72,5 +72,21 @@ namespace MyBot
 
             return closestIce;
         }
+
+        public static int AverageDistanceFromEnemy(Game game, Iceberg MyIce)
+        {
+            // gets: Iceberg MyIce
+            // returns: the average distance from it to the enemy icebergs
+            int enemyIceAmount = game.GetEnemyIcebergs().Length;
+            int enemyIceSum = 0;
+            foreach (var EnemyIce in game.GetEnemyIcebergs())
+            {
+                if (EnemyIce != MyIce)
+                {
+                    enemyIceSum += MyIce.GetTurnsTillArrival(EnemyIce);
+                }
+            }
+            return enemyIceSum / enemyIceAmount;
+        }
     }
 }

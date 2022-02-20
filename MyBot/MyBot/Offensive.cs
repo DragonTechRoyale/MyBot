@@ -7,6 +7,24 @@ namespace MyBot
 {
     public static class Offensive
     {
+        public static void CreateWall(Game game)
+        {
+            Iceberg[] Wall = new Iceberg[2];
+            Wall[0] = game.GetMyIcebergs().OrderBy(ice => Utils.AverageDistanceFromEnemy(game, ice)).ToList()[0];
+            Wall[0] = game.GetMyIcebergs().OrderBy(ice => Utils.AverageDistanceFromEnemy(game, ice)).ToList()[1];
+
+            foreach (Iceberg myIce in game.GetMyIcebergs())
+            {
+                if (myIce.Level != myIce.UpgradeLevelLimit && myIce.CanUpgrade())
+                {
+                    myIce.Upgrade();
+                }
+                else if (!(myIce == Wall[0]) || !(myIce == Wall[1]))
+                {
+                    if ()
+                }
+            }
+        }
         public static void Attack(Game game)
         {
             foreach (var myIceberg in game.GetMyIcebergs())
@@ -20,7 +38,7 @@ namespace MyBot
                 {
                     targets.AddRange(game.GetNeutralIcebergs().ToList());
                 }
-                if (game.GetEnemyIcebergs().Length > 0)
+                if (game.GetEnemyIcebergs().Length > 0 && game.GetNeutralIcebergs().Length == 0)
                 {
                     targets.AddRange(game.GetEnemyIcebergs().ToList());
                 }
@@ -37,7 +55,7 @@ namespace MyBot
                     {
                         // Send penguins to the target.
                         // In order to take control of the iceberg we need to send one penguin more than is currently in the iceberg.
-                        System.Console.WriteLine(myIceberg + " sends " + (targetPenguinAmount + 1) + " penguins to " + targetIce);
+                        //System.Console.WriteLine(myIceberg + " sends " + (targetPenguinAmount + 1) + " penguins to " + targetIce);
                         myIceberg.SendPenguins(targetIce, targetPenguinAmount + 1);
                     }
                 }
@@ -49,5 +67,5 @@ namespace MyBot
                 }
             }
         }
+        }
     }
-}
