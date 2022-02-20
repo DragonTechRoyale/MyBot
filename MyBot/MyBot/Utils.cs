@@ -41,14 +41,28 @@ namespace MyBot
             return AttackedIces;
         }
 
-        public static Iceberg GetClosestIceberg(Game game, Iceberg MyIce)
+        public static Iceberg GetClosestIceberg(Game game, Iceberg MyIce, int which = 0)
         {
             // Gets: an iceberg
-            // Returns: the cloests Iceberg we have to MyIce (not in actual 
+            // Returns: the cloests Iceberg to MyIce (not in actual 
             // distance but with a calculation of the speed in which penguins 
             // will arrive from MyIce to closestIce)
-            Iceberg closestIce = game.GetMyIcebergs()[0];
-            foreach (var ice in game.GetMyIcebergs())
+            List<Iceberg> Ices = game.GetAllIcebergs().ToList();
+            Iceberg closestIce = null;
+            if (which == 1)
+            {
+                Ices = game.GetMyIcebergs().ToList();
+            }
+            else if (which == 2)
+            {
+                Ices = game.GetEnemyIcebergs().ToList();
+            }
+            else if (which == 3)
+            {
+                Ices = game.GetNeutralIcebergs().ToList();
+            }
+            closestIce = Ices[0];
+            foreach (var ice in Ices)
             {
                 if (ice != MyIce && ice.GetTurnsTillArrival(MyIce) < closestIce.GetTurnsTillArrival(MyIce))
                 {

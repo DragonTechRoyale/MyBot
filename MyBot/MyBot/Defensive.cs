@@ -17,7 +17,7 @@ namespace MyBot
                 PenguinGroup AttackingGroup = AttackedIceTuple.Item2;
                 if (AttackingGroup.PenguinAmount >= AttackedIce.PenguinAmount)
                 {
-                    Utils.GetClosestIceberg(game, AttackedIce).SendPenguins(AttackedIce, AttackingGroup.PenguinAmount + 1);
+                    Utils.GetClosestIceberg(game, AttackedIce, 1).SendPenguins(AttackedIce, AttackingGroup.PenguinAmount + 1);
                 }
             }
         }

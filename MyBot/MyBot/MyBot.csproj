@@ -38,6 +38,8 @@
     <Compile Include="GameLogic.cs" />
     <Compile Include="Defensive.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Offensive.cs" />
+    <Compile Include="GameInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
