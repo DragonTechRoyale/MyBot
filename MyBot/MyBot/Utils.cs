@@ -88,5 +88,52 @@ namespace MyBot
             }
             return enemyIceSum / enemyIceAmount;
         }
+
+        public static Iceberg[] GetWalls(Game game)
+        {
+            // returns a two item array with the the walls (the two
+            // icebergs with the most penguins)
+            if (game.GetMyIcebergs().Length < 2)
+            {
+                return null;
+            }
+
+            Iceberg[] Walls = new Iceberg[2];
+            List<Iceberg> MyIces = game.GetMyIcebergs().ToList();
+
+            Walls[0] = StrongestIce(game, MyIces);
+            MyIces.Remove(Walls[0]);
+            Walls[1] = StrongestIce(game, MyIces);
+
+            return Walls;
+        }
+
+        public static Iceberg StrongestIce(Game game, List<Iceberg> Ices)
+        {
+            // gets: list of icebergs
+            // returns: the iceberg with the most penguins
+            Iceberg strongest = Ices[0];
+
+            foreach (Iceberg Ice in Ices)
+            {
+                if (Ice.PenguinAmount > strongest.PenguinAmount)
+                {
+                    strongest = Ice;
+                }
+            }
+
+            return strongest;
+        }
+
+        public static int WallRatio(Game game)
+        {
+            // returns: the ratio between the PenguinAmount of the walls
+            Iceberg[] Walls = GetWalls(game);
+            if (Walls == null || Walls[0].PenguinAmount == 0 || Walls[1].PenguinAmount == 0)
+            {
+                return 0;
+            }
+            return Walls[1].PenguinAmount / Walls[0].PenguinAmount;
+        }
     }
 }
