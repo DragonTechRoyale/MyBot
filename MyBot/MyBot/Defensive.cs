@@ -9,6 +9,7 @@ namespace MyBot
     {
         public static void DefendIcebergs(Game game)
         {
+            // TODO: prioritise ices that are about to be conquered 
             var AttackedIces = Utils.GetIcebergssBeingAttacked(game); // TODO: changed to icebergs in actual danger
             // TODO: add priority order
             bool WallsDefenfding = Utils.ShouldUseWalls(game);

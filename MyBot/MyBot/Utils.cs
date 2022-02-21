@@ -144,5 +144,93 @@ namespace MyBot
                 game.GetMyIcebergs().Length > 2) { return true; }
             return false;
         }
+
+        public static List<Iceberg> AboutToBeConquered(Game game, int which = 0)
+        {
+            // return a list of icebergs that are about to be conquered
+            List<Iceberg> IcesList = game.GetAllIcebergs().ToList();
+            List<(Iceberg, List<int>)> AboutToBeConqueredIces = new List<(Iceberg, List<int>)>();
+            // Iceberg - the ice that is about to be conquered
+            // List<int> - the turns in which it will be conqured  
+            int sum = 0; // the sum of penguins in the Ice we checking
+            PenguinGroup LastGroup = new PenguinGroup(); /* Refering to the
+            loop foreach (Iceberg Ice in IcesList): the last group that will
+            arrive at Ice */
+            List<PenguinGroup> AllAttackingGroups = new List<PenguinGroup>(); /*
+            Refering to the loop foreach (Iceberg Ice in IcesList): all the
+            groups which are destined to arrive at Ice */
+
+            switch (which)
+            {
+                case 1:
+                    IcesList = game.GetMyIcebergs().ToList();
+                    break;
+                case 2:
+                    IcesList = game.GetEnemyIcebergs().ToList();
+                    break;
+                case 3:
+                    IcesList = game.GetNeutralIcebergs().ToList();
+                    break;
+            }
+
+            // TODO: dont sum all at once 
+            foreach (Iceberg Ice in IcesList)
+            {
+                AllAttackingGroups = AllGroupsAttackingIceberg(game, Ice, 2);
+                LastGroup = AllAttackingGroups[0];
+                sum = Ice.PenguinAmount;
+
+                foreach (PenguinGroup group in AllGroupsAttackingIceberg(game, Ice, 2))
+                {
+                    if (LastGroup.TurnsTillArrival < group.TurnsTillArrival)
+                    {
+                        LastGroup = group;
+                    }
+                    sum -= group.PenguinAmount;
+                }
+                foreach (PenguinGroup group in AllGroupsAttackingIceberg(game, Ice, 1))
+                {
+                    if (LastGroup.TurnsTillArrival < group.TurnsTillArrival)
+                    {
+                        LastGroup = group;
+                    }
+                    sum += group.PenguinAmount;
+                }
+                sum += LastGroup.TurnsTillArrival * Ice.Level;
+
+                if (sum <= 0) { AboutToBeConqueredIces.Add(Ice); };
+            }
+
+            return AboutToBeConqueredIces;
+        }
+
+        public static List<PenguinGroup> AllGroupsAttackingIceberg(Game game, Iceberg ice, int which = 0)
+        {
+            // Return a list of all (or per which) groups attacking the Iceberg
+            // ice. Enemy groups supporting enemy ices or my groups supporting
+            // my ices can be included.
+            List<PenguinGroup> AttackingGroups = new List<PenguinGroup>();
+            List<PenguinGroup> groups = game.GetAllPenguinGroups().ToList();
+            
+            switch(which)
+            {
+                case 1:
+                    groups = game.GetMyPenguinGroups().ToList();
+                    break;
+                case 2:
+                    groups = game.GetEnemyPenguinGroups().ToList();
+                    break;
+            }
+
+            foreach(PenguinGroup group in groups)
+            {
+                if (group.Destination == ice)
+                {
+                    AttackingGroups.Add(group);
+                }
+            }
+
+            return AttackingGroups;
+        }
     }
 }
