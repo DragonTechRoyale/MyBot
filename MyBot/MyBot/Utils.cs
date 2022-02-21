@@ -176,25 +176,18 @@ namespace MyBot
             // TODO: dont sum all at once 
             foreach (Iceberg Ice in IcesList)
             {
-                AllAttackingGroups = AllGroupsAttackingIceberg(game, Ice, 2);
+                var AllAttackingGroups = AllGroupsAttackingIceberg(game, Ice);
                 LastGroup = AllAttackingGroups[0];
                 sum = Ice.PenguinAmount;
 
-                foreach (PenguinGroup group in AllGroupsAttackingIceberg(game, Ice, 2))
+                foreach (PenguinGroup group in AllAttackingGroups)
                 {
                     if (LastGroup.TurnsTillArrival < group.TurnsTillArrival)
                     {
                         LastGroup = group;
                     }
+                    if (group) // TODO: if enemy group
                     sum -= group.PenguinAmount;
-                }
-                foreach (PenguinGroup group in AllGroupsAttackingIceberg(game, Ice, 1))
-                {
-                    if (LastGroup.TurnsTillArrival < group.TurnsTillArrival)
-                    {
-                        LastGroup = group;
-                    }
-                    sum += group.PenguinAmount;
                 }
                 sum += LastGroup.TurnsTillArrival * Ice.Level;
 
@@ -230,7 +223,7 @@ namespace MyBot
                 }
             }
 
-            return AttackingGroups;
+            return AttackingGroups.OrderBy(group => group.TurnsTillArrival).ToList();
         }
     }
 }
