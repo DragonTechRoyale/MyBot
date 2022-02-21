@@ -43,11 +43,16 @@ namespace MyBot
                 }
             }
         }
+
         public static void WallAttack(Game game)
         {
             Iceberg[] Walls = Utils.GetWalls(game);
-            if (game.GetNeutralIcebergs().Length != 0)
+            if (Walls == null)
             {
+                return;
+            }
+            if (game.GetNeutralIcebergs().Length != 0) // should never be true
+            { 
                 foreach (var naturalIce in game.GetNeutralIcebergs())
                 {
                     int TotalSendAmount = naturalIce.PenguinAmount + 1;
@@ -61,7 +66,9 @@ namespace MyBot
             }
             else
             {
-                foreach (var EnemyIce in game.GetEnemyIcebergs())
+                List<Iceberg> targets = game.GetEnemyIcebergs().ToList();
+                targets = targets.OrderByDescending(ice => Walls[0].GetTurnsTillArrival(ice)).ToList();
+                foreach (var EnemyIce in targets)
                 {
                     int TotalSendAmount = EnemyIce.PenguinAmount + 1;
                     int Wall1SendAmount = TotalSendAmount * Utils.WallRatio(game);
@@ -75,11 +82,11 @@ namespace MyBot
 
         public static void Attack(Game game)
         {
-            if (Utils.GetWalls(game) != null)
+            if (Utils.ShouldUseWalls(game))
             {
                 WallAttack(game);
             }
-            else
+            else 
             {
                 foreach (var myIceberg in game.GetMyIcebergs())
                 {
@@ -96,6 +103,8 @@ namespace MyBot
                     {
                         targets.AddRange(game.GetEnemyIcebergs().ToList());
                     }
+
+                    targets = targets.OrderByDescending(ice => myIceberg.GetTurnsTillArrival(ice)).ToList();
 
                     foreach (Iceberg targetIce in targets)
                     {

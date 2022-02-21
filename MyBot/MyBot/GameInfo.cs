@@ -24,7 +24,15 @@ namespace MyBot
 
         public static void UpdateAttackedIcebergsByUs(Iceberg enemyIceberg, bool state)
         {
-            attackedIcebergsByUs[enemyIceberg.UniqueId] = state;
+            // should always be true 
+            if (attackedIcebergsByUs.ContainsKey(enemyIceberg.UniqueId))
+            {
+                attackedIcebergsByUs[enemyIceberg.UniqueId] = state;
+            }
+            else
+            {
+                System.Console.WriteLine($"attackedIcebergsByUs does not contain {enemyIceberg.UniqueId}");
+            }
         }
 
         public static bool IsAttackedByUs(Iceberg enemyIceberg)
@@ -42,12 +50,29 @@ namespace MyBot
 
         public static void UpdateUpgradeDict(int uniqueId)
         {
-            upgradedThisTurn[uniqueId] = true;
+            // should always be true 
+            if (upgradedThisTurn.ContainsKey(uniqueId))
+            {
+                upgradedThisTurn[uniqueId] = true;
+            }
+            else
+            {
+                System.Console.WriteLine($"upgradedThisTurn does not contain {uniqueId}");
+            }
         }
 
         public static bool UpgradedThisTurn(int uniqueId)
         {
-            return upgradedThisTurn[uniqueId];
+            // should always be true but isnt for some reason
+            if (upgradedThisTurn.ContainsKey(uniqueId))
+            {
+                return upgradedThisTurn[uniqueId];
+            }
+            else
+            {
+                System.Console.WriteLine($"upgradedThisTurn does not contain {uniqueId}");
+            }
+            return false;
         }
 
         public static void EndTurn(Game game)

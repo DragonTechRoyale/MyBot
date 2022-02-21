@@ -30,7 +30,7 @@ namespace MyBot
             else if (game.Turn >= 19)
             {
                 Defensive.DefendIcebergs(game);
-                Offensive.CreateWall(game);
+                if (Utils.ShouldUseWalls(game)) { Offensive.CreateWall(game); }
                 Offensive.Attack(game);
             }
             GameInfo.EndTurn(game);

@@ -135,5 +135,14 @@ namespace MyBot
             }
             return Walls[1].PenguinAmount / Walls[0].PenguinAmount;
         }
+
+        public static bool ShouldUseWalls(Game game)
+        {
+            // if there are natural icebergs and we have less than 3 icebergs
+            // there is no need for walls
+            if (game.GetNeutralIcebergs().Length == 0 &&
+                game.GetMyIcebergs().Length > 2) { return true; }
+            return false;
+        }
     }
 }
