@@ -145,7 +145,7 @@ namespace MyBot
             return false;
         }
 
-        public static List<Iceberg> AboutToBeConquered(Game game, int which = 0)
+        public static List<(Iceberg, List<int>)> AboutToBeConquered(Game game, int which = 0)
         {
             // return a list of icebergs that are about to be conquered
             List<Iceberg> IcesList = game.GetAllIcebergs().ToList();
@@ -153,9 +153,9 @@ namespace MyBot
             // Iceberg - the ice that is about to be conquered
             // List<int> - the turns in which it will be conqured  
             int sum = 0; // the sum of penguins in the Ice we checking
-            PenguinGroup LastGroup = new PenguinGroup(); /* Refering to the
+            /*PenguinGroup LastGroup = new PenguinGroup(); *//* Refering to the
             loop foreach (Iceberg Ice in IcesList): the last group that will
-            arrive at Ice */
+            arrive at Ice */ /* - not needed actually*/
             List<PenguinGroup> AllAttackingGroups = new List<PenguinGroup>(); /*
             Refering to the loop foreach (Iceberg Ice in IcesList): all the
             groups which are destined to arrive at Ice */
@@ -173,25 +173,56 @@ namespace MyBot
                     break;
             }
 
-            // TODO: dont sum all at once 
+            // TODO: dont sum all at once - done(?)
             foreach (Iceberg Ice in IcesList)
             {
-                var AllAttackingGroups = AllGroupsAttackingIceberg(game, Ice);
-                LastGroup = AllAttackingGroups[0];
+                AllAttackingGroups = AllGroupsAttackingIceberg(game, Ice);
+                List<int> ConqueredTurns = new List<int>();
                 sum = Ice.PenguinAmount;
+                int LocalTurnsCounter = 0;
 
-                foreach (PenguinGroup group in AllAttackingGroups)
+                //foreach (PenguinGroup group in AllAttackingGroups)
+                for (int i = 0; i < AllAttackingGroups.OrderBy(group => group.TurnsTillArrival).Last().TurnsTillArrival; i++)
                 {
-                    if (LastGroup.TurnsTillArrival < group.TurnsTillArrival)
+                    List<PenguinGroup> temp = new List<PenguinGroup>();
+                    foreach (PenguinGroup group in AllAttackingGroups)
                     {
-                        LastGroup = group;
+                        if (group.TurnsTillArrival == i)
+                        {
+                            temp.Add(group);
+                        }
                     }
-                    if (group) // TODO: if enemy group
-                    sum -= group.PenguinAmount;
-                }
-                sum += LastGroup.TurnsTillArrival * Ice.Level;
+                    foreach (PenguinGroup group in temp)
+                    {
+                        /* not needed
+                        if (LastGroup.TurnsTillArrival < group.TurnsTillArrival)
+                        {
+                            LastGroup = group;
+                        }
+                        */
+                        if (group.Owner.Id == game.GetEnemy().Id)
+                        {
+                            sum -= group.PenguinAmount;
+                        }
+                        else if (group.Owner.Id == game.GetMyself().Id)
+                        {
+                            sum += group.PenguinAmount;
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("wtf 2.0");
+                        }
 
-                if (sum <= 0) { AboutToBeConqueredIces.Add(Ice); };
+                        if (sum <= 0)
+                        {
+                            // Ice will be conquered in this specific turn
+                            ConqueredTurns.Add(i);
+                        }
+                    }
+                    
+                    
+                }
+                if (sum <= 0) { AboutToBeConqueredIces.Add((Ice, ConqueredTurns)); };
             }
 
             return AboutToBeConqueredIces;

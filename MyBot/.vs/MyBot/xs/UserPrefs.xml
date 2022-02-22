@@ -1,15 +1,15 @@
 ﻿<Properties StartupConfiguration="{750400C6-482F-49B1-A7A6-1DC2C472A025}|Default">
   <MonoDevelop.Ide.ItemProperties.MyBot PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MyBot/Utils.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MyBot/GameLogic.cs">
     <Files>
       <File FileName="MyBot/Program.cs" Line="19" Column="2" NotebookId="1" />
-      <File FileName="MyBot/GameLogic.cs" NotebookId="1" />
-      <File FileName="MyBot/Utils.cs" Line="154" Column="67" NotebookId="1" />
+      <File FileName="MyBot/GameLogic.cs" Line="39" Column="2" NotebookId="1" />
+      <File FileName="MyBot/Utils.cs" Line="148" Column="50" NotebookId="1" />
       <File FileName="MyBot/Defensive.cs" NotebookId="1" />
       <File FileName="MyBot/GameInfo.cs" NotebookId="1" />
     </Files>
     <FloatingWindows>
-      <FloatingWindow WindowId="1" X="840" Y="25" Width="840" Height="964">
+      <FloatingWindow WindowId="1" X="840" Y="25" Width="840" Height="965">
         <Files>
           <File FileName="MyBot/Offensive.cs" Line="113" Column="26" />
         </Files>
