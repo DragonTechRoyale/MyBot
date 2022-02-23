@@ -10,17 +10,19 @@ namespace MyBot
         public static void DefendIcebergs(Game game)
         {
             // TODO: prioritise ices that are about to be conquered 
-            var AttackedIces = Utils.GetIcebergssBeingAttacked(game); // TODO: changed to icebergs in actual danger
+            //var AttackedIces = Utils.GetIcebergssBeingAttacked(game); // TODO: changed to icebergs in actual danger
             // TODO: add priority order
+
             bool WallsDefenfding = Utils.ShouldUseWalls(game);
             Iceberg[] Walls = Utils.GetWalls(game);
-
+            List<(Iceberg, List<int>)> AboutToBeConqueredIces = Utils.AboutToBeConquered(game, 1);
+            /*
             if (WallsDefenfding && Walls != null)
             {
                 AttackedIces = AttackedIces.OrderByDescending(ice => Walls[0].GetTurnsTillArrival(ice.Item1)).ToList();
-            }
+            }*/
 
-            foreach (var AttackedIceTuple in AttackedIces)
+            foreach (var AttackedIceTuple in AboutToBeConqueredIces)
             {
                 Iceberg AttackedIce = AttackedIceTuple.Item1;
                 PenguinGroup AttackingGroup = AttackedIceTuple.Item2;
